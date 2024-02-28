@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  login:
+    container_name: chat-services
+    image: coderbillzay/chat-services
+    ports:
+      - '8877:8877'
+      - '9092:9092'
+    volumes:
+      - ./:/server
+    restart: always

@@ -1,0 +1,18 @@
+socket:
+  host: localhost
+  port: 9092
+
+server:
+  port: 8877
+
+spring:
+  devtools: true
+  data:
+    mongodb:
+      authentication-database: admin
+      username: capstone
+      password: capstonevlu
+      database: capstone
+      port: 50370
+      host: 34.143.238.116
+      auto-index-creation: true
