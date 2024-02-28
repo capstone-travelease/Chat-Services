@@ -1,5 +1,6 @@
 package com.capstone.ChatService.Controllers;
 
+import com.capstone.ChatService.DTOs.RequestUserNameDTO;
 import com.capstone.ChatService.DTOs.ResponseDataDTO;
 import com.capstone.ChatService.DTOs.ResponseStatusDTO;
 import com.capstone.ChatService.Entities.Message;
@@ -87,13 +88,13 @@ public class ChatController {
     }
 
     @GetMapping("/getChat")
-    public ResponseEntity getSenderChatList(@RequestParam(name = "senderName", required = true) String senderName, @RequestParam(name = "targetName", required = true) String targetName){
-        var data = chatServices.getChat(senderName, targetName);
+    public ResponseEntity getSenderChatList(@RequestBody RequestUserNameDTO userName){
+        var data = chatServices.getChat(userName);
         if (data.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseStatusDTO(
                             404,
-                            "Not found chat with " + senderName +" and "+ targetName,
+                            "Not found chat with " + userName.getSenderName() +" and "+ userName.getTargetName(),
                             "Failure"
                     )
             );
