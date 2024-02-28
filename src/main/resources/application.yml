@@ -1,5 +1,5 @@
 socket:
-  host: localhost
+  host: 34.126.163.206
   port: 9092
 
 server:
