@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @Log4j2
@@ -46,7 +47,7 @@ public class ChatController {
     }
 
     @PostMapping("/sendChat")
-    public ResponseEntity<ResponseStatusDTO> sendChatting(@RequestBody Message messagePost){
+    public ResponseEntity<ResponseDataDTO> sendChatting(@RequestBody Message messagePost){
         try{
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule()); // Register the JavaTimeModule
@@ -59,26 +60,26 @@ public class ChatController {
             var saveStatus = chatServices.saveChat(messagePost);
             if (saveStatus == 1){
                 return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseStatusDTO(
+                        new ResponseDataDTO(
                         200,
-                        "Sent and Saved chat Successful",
+                        List.of(messagePost),
                         "Successful"
                     )
                 );
             } else{
                 return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(
-                        new ResponseStatusDTO(
+                        new ResponseDataDTO(
                                 200,
-                                "Error in Saved Chat",
+                                List.of(),
                                 "Failure"
                         )
                 );
             }
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseStatusDTO(
+                    new ResponseDataDTO(
                             404,
-                            "Error in Sent Chat",
+                            List.of(),
                             "Failure"
                     )
             );
