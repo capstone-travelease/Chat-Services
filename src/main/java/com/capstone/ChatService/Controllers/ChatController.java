@@ -2,6 +2,7 @@ package com.capstone.ChatService.Controllers;
 
 import com.capstone.ChatService.DTOs.RequestUserNameDTO;
 import com.capstone.ChatService.DTOs.ResponseDataDTO;
+import com.capstone.ChatService.DTOs.ResponseSendDTO;
 import com.capstone.ChatService.DTOs.ResponseStatusDTO;
 import com.capstone.ChatService.Entities.Message;
 import com.capstone.ChatService.Services.ChatServices;
@@ -47,7 +48,7 @@ public class ChatController {
     }
 
     @PostMapping("/sendChat")
-    public ResponseEntity<ResponseDataDTO> sendChatting(@RequestBody Message messagePost){
+    public ResponseEntity<ResponseSendDTO> sendChatting(@RequestBody Message messagePost){
         try{
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule()); // Register the JavaTimeModule
@@ -60,26 +61,26 @@ public class ChatController {
             var saveStatus = chatServices.saveChat(messagePost);
             if (saveStatus == 1){
                 return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseDataDTO(
+                        new ResponseSendDTO(
                         200,
-                        List.of(messagePost),
+                        messagePost,
                         "Successful"
                     )
                 );
             } else{
                 return ResponseEntity.status(HttpStatus.NOT_MODIFIED).body(
-                        new ResponseDataDTO(
+                        new ResponseSendDTO(
                                 200,
-                                List.of(),
+                                messagePost,
                                 "Failure"
                         )
                 );
             }
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseDataDTO(
+                    new ResponseSendDTO(
                             404,
-                            List.of(),
+                            messagePost,
                             "Failure"
                     )
             );
