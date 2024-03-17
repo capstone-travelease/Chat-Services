@@ -1,6 +1,6 @@
 package com.capstone.ChatService.Controllers;
 
-import com.capstone.ChatService.DTOs.RequestUserNameDTO;
+import com.capstone.ChatService.DTOs.RequestUserIdDTO;
 import com.capstone.ChatService.DTOs.ResponseDataDTO;
 import com.capstone.ChatService.DTOs.ResponseSendDTO;
 import com.capstone.ChatService.DTOs.ResponseStatusDTO;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @Log4j2
@@ -44,7 +43,7 @@ public class ChatController {
         this.socketServer.addConnectListener(onUserConnectWithSocket);
         this.socketServer.addDisconnectListener(onUserDisconnectWithSocket);
 
-//        this.socketServer.addEventListener("chatEvent", Message.class, onSendMessage);
+        this.socketServer.addEventListener("sendChat", Message.class, onSendMessage);
     }
 
     @PostMapping("/sendChat")
@@ -56,7 +55,7 @@ public class ChatController {
             messagePost.setTime(LocalDateTime.now().toString());
             messagePost.setMessageId((int)(Math.random() * (max - min)) + min);
 
-            socketServer.getBroadcastOperations().sendEvent(messagePost.getTargetUserName(), messagePost);
+            socketServer.getBroadcastOperations().sendEvent("receiveChat", messagePost);
 
             var saveStatus = chatServices.saveChat(messagePost);
             if (saveStatus == 1){
@@ -88,13 +87,13 @@ public class ChatController {
     }
 
     @GetMapping("/getChat")
-    public ResponseEntity getSenderChatList(@RequestBody RequestUserNameDTO userName){
-        var data = chatServices.getChat(userName);
+    public ResponseEntity getSenderChatList(@RequestBody RequestUserIdDTO userId){
+        var data = chatServices.getChat(userId);
         if (data.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ResponseStatusDTO(
                             404,
-                            "Not found chat with " + userName.getSenderName() +" and "+ userName.getTargetName(),
+                            "Not found chat with " + userId.getSenderId() +" and "+ userId.getTargetId(),
                             "Failure"
                     )
             );
@@ -127,7 +126,7 @@ public class ChatController {
     public DataListener<Message> onSendMessage = new DataListener<Message>() {
         @Override
         public void onData(SocketIOClient client, Message message, AckRequest acknowledge) throws Exception {
-            socketServer.getBroadcastOperations().sendEvent(message.getTargetUserName(),client, message);
+            socketServer.getBroadcastOperations().sendEvent("receiveChat",client, message);
             // After sending message to target user we can send acknowledge to sender
             acknowledge.sendAckData("Message send to target user successfully");
         }

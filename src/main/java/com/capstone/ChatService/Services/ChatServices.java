@@ -1,6 +1,6 @@
 package com.capstone.ChatService.Services;
 
-import com.capstone.ChatService.DTOs.RequestUserNameDTO;
+import com.capstone.ChatService.DTOs.RequestUserIdDTO;
 import com.capstone.ChatService.Entities.Message;
 import com.capstone.ChatService.Repositories.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ChatServices {
         }
     }
 
-    public List<Message> getChat(RequestUserNameDTO userName){
-        return chatRepository.findBySenderAndTarget(userName.getSenderName(), userName.getTargetName());
+    public List<Message> getChat(RequestUserIdDTO userId){
+        return chatRepository.findBySenderAndTarget(userId.getSenderId(), userId.getTargetId());
     }
 }

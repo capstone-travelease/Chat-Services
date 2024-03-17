@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 public class Message {
     @Id
     private Integer messageId;
-    private String senderName;
-    private String targetUserName;
+    private Integer senderId;
+    private Integer targetId;
     private String message;
     private String time;
 }
