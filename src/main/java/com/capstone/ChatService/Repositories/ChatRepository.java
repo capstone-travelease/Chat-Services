@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRepository extends MongoRepository<Message, String> {
-    @Query("{$or: [{'senderName': ?0, 'targetUserName': ?1}, {'senderName': ?1, 'targetUserName': ?0}]}")
-    List<Message> findBySenderAndTarget(Integer senderName, Integer targetUserName);
+    @Query("{$or: [{'senderId': ?0, 'targetId': ?1}, {'senderId': ?1, 'targetId': ?0}]}")
+    List<Message> findBySenderAndTarget(Integer senderId, Integer targetId);
 }
