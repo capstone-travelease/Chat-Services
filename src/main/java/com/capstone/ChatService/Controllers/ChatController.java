@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @Log4j2
@@ -90,11 +91,11 @@ public class ChatController {
     public ResponseEntity getSenderChatList(@RequestBody RequestUserIdDTO userId){
         var data = chatServices.getChat(userId);
         if (data.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ResponseStatusDTO(
-                            404,
-                            "Not found chat with " + userId.getSenderId() +" and "+ userId.getTargetId(),
-                            "Failure"
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseDataDTO(
+                            200,
+                            List.of(),
+                            "Successful"
                     )
             );
         }
