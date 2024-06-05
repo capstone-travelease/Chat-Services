@@ -14,5 +14,5 @@ spring:
       password: capstonevlu
       database: capstone
       port: 50370
-      host: 35.247.170.16
+      host: 34.126.137.107
       auto-index-creation: true
